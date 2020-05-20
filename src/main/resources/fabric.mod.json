@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "headfix",
+  "version": "${version}",
+
+  "name": "Head name fix",
+  "description": "Heads will no longer lose their CustomName when being placed down",
+  "authors": [
+    "manyrandomthings"
+  ],
+  "contact": {
+    "homepage": "https://github.com/manyrandomthings/head-name-fix",
+    "sources": "https://github.com/manyrandomthings/head-name-fix"
+  },
+
+  "license": "CC0-1.0",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+    ]
+  },
+  "mixins": [
+    "headfix.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "minecraft": "1.16.x"
+  }
+}
