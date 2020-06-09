@@ -21,6 +21,7 @@ public abstract class AbstractSkullBlockMixin extends BlockWithEntity {
 
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
+        super.onPlaced(world, pos, state, placer, itemStack);
         // check if item has a name when being placed
         if(itemStack.hasCustomName()) {
             // get block entity at placed location
