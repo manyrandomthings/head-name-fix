@@ -1,6 +1,10 @@
 package headfix.mixins;
 
+import org.spongepowered.asm.mixin.Intrinsic;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import headfix.SkullBlockEntityAccessor;
 import net.minecraft.block.AbstractSkullBlock;
@@ -20,10 +24,18 @@ public abstract class AbstractSkullBlockMixin extends BlockWithEntity {
     }
 
     @Override
+    @Intrinsic
     public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
         super.onPlaced(world, pos, state, placer, itemStack);
+    }
+
+    @Inject(
+        method = "onPlaced(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;)V",
+        at = @At("TAIL")
+    )
+    private void addNameToBlockEntity(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack, CallbackInfo ci) {
         // check if item has a name when being placed
-        if(itemStack.hasCustomName()) {
+        if(!world.isClient && itemStack.hasCustomName()) {
             // get block entity at placed location
             BlockEntity blockEntity = world.getBlockEntity(pos);
             // check if block entity is a head block entity
