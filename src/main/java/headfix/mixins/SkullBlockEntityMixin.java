@@ -4,7 +4,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import headfix.SkullBlockEntityAccessor;
 import net.minecraft.block.BlockState;
@@ -26,7 +25,7 @@ public abstract class SkullBlockEntityMixin extends BlockEntity implements Namea
 
     // for saving CustomName to nbt from SkullBlockEntity object
     @Inject(method = "writeNbt", at = @At("TAIL"))
-    private void addCustomNameToNBT(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
+    private void addCustomNameToNBT(NbtCompound nbt, CallbackInfo ci) {
         if(this.customName != null) {
             // saves name to nbt tag
             nbt.putString("CustomName", Text.Serializer.toJson(this.customName));
