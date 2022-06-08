@@ -1,22 +1,22 @@
 package headfix.mixins;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import headfix.SkullBlockEntityAccessor;
+import headfix.SetableNameable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.SkullBlockEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.text.Text;
-import net.minecraft.util.Nameable;
 import net.minecraft.util.math.BlockPos;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(SkullBlockEntity.class)
-public abstract class SkullBlockEntityMixin extends BlockEntity implements Nameable, SkullBlockEntityAccessor {
+public abstract class SkullBlockEntityMixin extends BlockEntity implements SetableNameable {
+    private static final String CUSTOM_NAME_TAG = "CustomName";
     private Text customName;
 
     public SkullBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -28,29 +28,37 @@ public abstract class SkullBlockEntityMixin extends BlockEntity implements Namea
     private void addCustomNameToNBT(NbtCompound nbt, CallbackInfo ci) {
         if(this.customName != null) {
             // saves name to nbt tag
-            nbt.putString("CustomName", Text.Serializer.toJson(this.customName));
+            nbt.putString(CUSTOM_NAME_TAG, Text.Serializer.toJson(this.customName));
         }
     }
 
     // for loading CustomName from nbt to SkullBlockEntity object
     @Inject(method = "readNbt", at = @At("TAIL"))
     private void getCustomNameFromNBT(NbtCompound tag, CallbackInfo ci) {
-        if(tag.contains("CustomName", 8)) {
+        if(tag.contains(CUSTOM_NAME_TAG, NbtElement.STRING_TYPE)) {
             // loads name from nbt tag
-            this.customName = Text.Serializer.fromJson(tag.getString("CustomName"));
+            this.customName = Text.Serializer.fromJson(tag.getString(CUSTOM_NAME_TAG));
         }
     }
 
+    @Override
     public void setCustomName(Text customName) {
         this.customName = customName;
     }
 
-    // both required for Nameable
+    @Override
     public Text getCustomName() {
         return this.customName;
     }
 
-    public Text getDisplayName() {
-        return this.customName;
+    @Override
+    public Text getName() {
+        // return custom name if exists
+        if(this.customName != null)  {
+            return this.customName;
+        }
+
+        // return block name
+        return this.getCachedState().getBlock().getName();
     }
 }
