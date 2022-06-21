@@ -2,22 +2,17 @@ package headfix;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.AbstractSkullBlock;
+import net.minecraft.block.Block;
 import net.minecraft.loot.function.CopyNameLootFunction;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class HeadFix implements ModInitializer {
-    public static final Set<Identifier> HEAD_LOOT_TABLES = new HashSet<>(Set.of(
-        Blocks.CREEPER_HEAD.getLootTableId(),
-        Blocks.DRAGON_HEAD.getLootTableId(),
-        Blocks.PLAYER_HEAD.getLootTableId(),
-        Blocks.SKELETON_SKULL.getLootTableId(),
-        Blocks.WITHER_SKELETON_SKULL.getLootTableId(),
-        Blocks.ZOMBIE_HEAD.getLootTableId()
-    ));
+    public static final Set<Identifier> HEAD_LOOT_TABLES = new HashSet<>();
 
     @Override
     public void onInitialize() {
@@ -28,5 +23,20 @@ public class HeadFix implements ModInitializer {
                 tableBuilder.apply(CopyNameLootFunction.builder(CopyNameLootFunction.Source.BLOCK_ENTITY).build());
             }
         });
+    }
+
+    // gets loot tables of all skull blocks
+    public static void findHeadLootTables() {
+        // clear existing items in set
+        HEAD_LOOT_TABLES.clear();
+
+        // loop through all blocks
+        for(Block block : Registry.BLOCK) {
+            // find blocks that are AbstractSkullBlock
+            if(block instanceof AbstractSkullBlock) {
+                // add to loot tables set
+                HEAD_LOOT_TABLES.add(block.getLootTableId());
+            }
+        }
     }
 }
