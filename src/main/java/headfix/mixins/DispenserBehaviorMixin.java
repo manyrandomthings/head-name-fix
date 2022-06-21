@@ -24,8 +24,8 @@ public abstract class DispenserBehaviorMixin {
         locals = LocalCapture.CAPTURE_FAILHARD
     )
     private void addNameToDispensed(BlockPointer pointer, ItemStack stack, CallbackInfoReturnable<ItemStack> cir, World world, Direction direction, BlockPos blockPos, BlockEntity blockEntity) {
-        if(stack.hasCustomName()) {
-            ((SetableNameable) blockEntity).setCustomName(stack.getName());
+        if(stack.hasCustomName() && blockEntity instanceof SetableNameable setableNameable) {
+            setableNameable.setCustomName(stack.getName());
         }
     }
 }
