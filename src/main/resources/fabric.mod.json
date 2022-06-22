@@ -13,6 +13,7 @@
     "sources": "https://github.com/manyrandomthings/head-name-fix"
   },
   "license": "LGPL-3.0-or-later",
+  "icon": "assets/headfix/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
