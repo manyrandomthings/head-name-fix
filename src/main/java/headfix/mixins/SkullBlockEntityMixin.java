@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(SkullBlockEntity.class)
 public abstract class SkullBlockEntityMixin extends BlockEntity implements SetableNameable {
@@ -25,7 +26,7 @@ public abstract class SkullBlockEntityMixin extends BlockEntity implements Setab
 
     // for saving CustomName to nbt from SkullBlockEntity object
     @Inject(method = "writeNbt", at = @At("TAIL"))
-    private void addCustomNameToNBT(NbtCompound nbt, CallbackInfo ci) {
+    private void addCustomNameToNBT(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
         if(this.customName != null) {
             // saves name to nbt tag
             nbt.putString(CUSTOM_NAME_TAG, Text.Serializer.toJson(this.customName));
