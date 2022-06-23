@@ -6,26 +6,26 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.SkullBlockEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(SkullBlockEntity.class)
 public abstract class SkullBlockEntityMixin extends BlockEntity implements SetableNameable {
     private static final String CUSTOM_NAME_TAG = "CustomName";
+    private static final int NBT_STRING_TYPE = 8;
     private Text customName;
 
-    public SkullBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
+    public SkullBlockEntityMixin(BlockEntityType<?> type) {
+        super(type);
     }
 
     // for saving CustomName to nbt from SkullBlockEntity object
     @Inject(method = "writeNbt", at = @At("TAIL"))
-    private void addCustomNameToNBT(NbtCompound nbt, CallbackInfo ci) {
+    private void addCustomNameToNBT(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
         if(this.customName != null) {
             // saves name to nbt tag
             nbt.putString(CUSTOM_NAME_TAG, Text.Serializer.toJson(this.customName));
@@ -33,9 +33,9 @@ public abstract class SkullBlockEntityMixin extends BlockEntity implements Setab
     }
 
     // for loading CustomName from nbt to SkullBlockEntity object
-    @Inject(method = "readNbt", at = @At("TAIL"))
-    private void getCustomNameFromNBT(NbtCompound tag, CallbackInfo ci) {
-        if(tag.contains(CUSTOM_NAME_TAG, NbtElement.STRING_TYPE)) {
+    @Inject(method = "fromTag", at = @At("TAIL"))
+    private void getCustomNameFromNBT(BlockState state, NbtCompound tag, CallbackInfo ci) {
+        if(tag.contains(CUSTOM_NAME_TAG, NBT_STRING_TYPE)) {
             // loads name from nbt tag
             this.customName = Text.Serializer.fromJson(tag.getString(CUSTOM_NAME_TAG));
         }

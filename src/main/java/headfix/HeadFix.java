@@ -1,12 +1,13 @@
 package headfix;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
+import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
 import net.minecraft.block.AbstractSkullBlock;
 import net.minecraft.block.Block;
 import net.minecraft.loot.function.CopyNameLootFunction;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,11 +17,11 @@ public class HeadFix implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        LootTableEvents.MODIFY.register((resourceManager, lootManager, id, tableBuilder, source) -> {
+        LootTableLoadingCallback.EVENT.register((resourceManager, manager, id, supplier, setter) -> {
             // check if head loot table
             if(HEAD_LOOT_TABLES.contains(id)) {
                 // add copy name function
-                tableBuilder.apply(CopyNameLootFunction.builder(CopyNameLootFunction.Source.BLOCK_ENTITY).build());
+                supplier.withFunction(CopyNameLootFunction.builder(CopyNameLootFunction.Source.BLOCK_ENTITY).build());
             }
         });
     }
