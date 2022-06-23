@@ -3,7 +3,7 @@
   "id": "headfix",
   "version": "${version}",
   "name": "Head name fix",
-  "description": "Heads will no longer lose their CustomName when being placed down",
+  "description": "Mob heads will keep their custom names when placed",
   "authors": [
     "manyrandomthings"
   ],
