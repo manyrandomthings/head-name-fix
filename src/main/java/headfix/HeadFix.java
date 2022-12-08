@@ -5,8 +5,8 @@ import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.block.AbstractSkullBlock;
 import net.minecraft.block.Block;
 import net.minecraft.loot.function.CopyNameLootFunction;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -31,7 +31,7 @@ public class HeadFix implements ModInitializer {
         HEAD_LOOT_TABLES.clear();
 
         // loop through all blocks
-        for(Block block : Registry.BLOCK) {
+        for(Block block : Registries.BLOCK) {
             // find blocks that are AbstractSkullBlock
             if(block instanceof AbstractSkullBlock) {
                 // add to loot tables set
