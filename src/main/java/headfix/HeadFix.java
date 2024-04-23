@@ -4,7 +4,8 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.block.AbstractSkullBlock;
 import net.minecraft.block.Block;
-import net.minecraft.loot.function.CopyNameLootFunction;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.loot.function.CopyComponentsLootFunction;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 
@@ -16,11 +17,15 @@ public class HeadFix implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        LootTableEvents.MODIFY.register((resourceManager, lootManager, id, tableBuilder, source) -> {
+        LootTableEvents.MODIFY.register((key, tableBuilder, source) -> {
             // check if head loot table
-            if(HEAD_LOOT_TABLES.contains(id)) {
+            if(HEAD_LOOT_TABLES.contains(key.getValue())) {
                 // add copy name function
-                tableBuilder.apply(CopyNameLootFunction.builder(CopyNameLootFunction.Source.BLOCK_ENTITY).build());
+                tableBuilder.apply(
+                    CopyComponentsLootFunction
+                    .builder(CopyComponentsLootFunction.Source.BLOCK_ENTITY)
+                    .include(DataComponentTypes.CUSTOM_NAME)
+                );
             }
         });
     }
@@ -35,7 +40,7 @@ public class HeadFix implements ModInitializer {
             // find blocks that are AbstractSkullBlock
             if(block instanceof AbstractSkullBlock) {
                 // add to loot tables set
-                HEAD_LOOT_TABLES.add(block.getLootTableId());
+                HEAD_LOOT_TABLES.add(block.getLootTableKey().getValue());
             }
         }
     }

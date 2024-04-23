@@ -2,13 +2,11 @@
   "required": true,
   "minVersion": "0.8",
   "package": "headfix.mixins",
-  "compatibilityLevel": "JAVA_17",
+  "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "AbstractSkullBlockMixin",
-    "BlockMixin",
+    "SchemasMixin",
     "DispenserBehaviorMixin",
-    "LootManagerMixin",
-    "SkullBlockEntityMixin"
+    "ReloadableRegistriesMixin"
   ],
   "injectors": {
     "defaultRequire": 1
