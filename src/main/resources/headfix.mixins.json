@@ -4,7 +4,6 @@
   "package": "headfix.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "SchemasMixin",
     "DispenserBehaviorMixin",
     "ReloadableRegistriesMixin"
   ],

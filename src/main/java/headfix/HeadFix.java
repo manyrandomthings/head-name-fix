@@ -1,7 +1,7 @@
 package headfix;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
+import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.block.AbstractSkullBlock;
 import net.minecraft.block.Block;
 import net.minecraft.component.DataComponentTypes;
@@ -17,7 +17,7 @@ public class HeadFix implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        LootTableEvents.MODIFY.register((key, tableBuilder, source) -> {
+        LootTableEvents.MODIFY.register((key, tableBuilder, source, registries) -> {
             // check if head loot table
             if(HEAD_LOOT_TABLES.contains(key.getValue())) {
                 // add copy name function
@@ -40,7 +40,7 @@ public class HeadFix implements ModInitializer {
             // find blocks that are AbstractSkullBlock
             if(block instanceof AbstractSkullBlock) {
                 // add to loot tables set
-                HEAD_LOOT_TABLES.add(block.getLootTableKey().getValue());
+                HEAD_LOOT_TABLES.add(block.getLootTableKey().get().getValue());
             }
         }
     }

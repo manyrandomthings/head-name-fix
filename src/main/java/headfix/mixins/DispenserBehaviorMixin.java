@@ -1,6 +1,7 @@
 package headfix.mixins;
 
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
@@ -12,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-@Mixin(targets = "net/minecraft/block/dispenser/DispenserBehavior$4")
+@Mixin(targets = "net/minecraft/block/dispenser/DispenserBehavior$2")
 public abstract class DispenserBehaviorMixin {
     @Inject(
         method = "dispenseSilently",
@@ -24,7 +25,7 @@ public abstract class DispenserBehaviorMixin {
     )
     private void addNameToDispensed(BlockPointer pointer, ItemStack stack, CallbackInfoReturnable<ItemStack> cir, World world, Direction direction, BlockPos blockPos) {
         BlockEntity blockEntity = world.getBlockEntity(blockPos);
-        if(blockEntity != null) {
+        if(blockEntity != null && blockEntity.getType() == BlockEntityType.SKULL) {
             blockEntity.readComponents(stack);
         }
     }
