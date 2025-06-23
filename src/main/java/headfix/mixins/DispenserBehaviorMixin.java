@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-@Mixin(targets = "net/minecraft/block/dispenser/DispenserBehavior$2")
+@Mixin(targets = "net/minecraft/block/dispenser/DispenserBehavior$15")
 public abstract class DispenserBehaviorMixin {
     @Inject(
         method = "dispenseSilently",
